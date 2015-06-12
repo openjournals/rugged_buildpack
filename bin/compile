@@ -31,7 +31,7 @@ function set-default-env (){
   echo "export $1=\$$1:/app/vendor/$2" >> $EXPORT_SCRIPT
 }
 
-if [ -d "$BUILD_CACHE_DIR/cmake"]; then
+if [ -d "$BUILD_CACHE_DIR/cmake" ]; then
     topic "found cached cmake build"
     cp -R "$BUILD_CACHE_DIR/cmake" $VENDOR_DIR
 else
