@@ -14,8 +14,8 @@ function set_env_var() {
     echo "$ENV_VAR_NAME = $ENV_VAR_VALUE"
 }
 
-if [ -d "$BUILD_DIR/.apt/usr/include" ]; then
-    echo $(ls $BUILD_DIR/.apt/usr/include/unicode/*)
+if [ -d "$BUILD_DIR/.apt/usr/include/unicode" ]; then
+    echo "found the unicode dir!"
 fi
 
 set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-lib=\"$BUILD_DIR/.apt/usr/lib\" --with-icu-include=\"$BUILD_DIR/.apt/usr/include/i386-linux-gnu\""
