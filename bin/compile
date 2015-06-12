@@ -14,7 +14,7 @@ function set_env_var() {
     echo "$ENV_VAR_NAME = $ENV_VAR_VALUE"
 }
 
-if [ -d "$BUILD_DIR/.apt/usr" ]; then
+if [ -d "$BUILD_DIR/.apt/usr/include" ]; then
     echo "found /.apt/usr directory!"
 fi
 
