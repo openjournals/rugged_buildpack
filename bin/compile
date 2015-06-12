@@ -18,4 +18,4 @@ if [ -d "$BUILD_DIR/.apt/usr/include" ]; then
     find $BUILD_DIR/.apt/usr/include -type f -follow -print
 fi
 
-set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-lib=\"$BUILD_DIR/.apt/usr/lib\" --with-icu-include=\"$BUILD_DIR/.apt/usr/include/i386-linux-gnu\""
+set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-lib=\"$BUILD_DIR/.apt/usr/lib\" --with-icu-include=\"$BUILD_DIR/.apt/usr/include/x86_64-linux-gnu\""
