@@ -13,6 +13,6 @@ function set_env_var() {
     echo -n "$ENV_VAR_VALUE" > $ENV_DIR/$ENV_VAR_NAME
 }
 
-set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-lib=/app/.apt/usr/lib --with-icu-lib=/app/.apt/usr/include"
+set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-lib=/app/.apt/usr/lib --with-icu-include=/app/.apt/usr/include"
 
 
