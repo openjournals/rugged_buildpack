@@ -7,15 +7,51 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-function set_env_var() {
-    ENV_VAR_NAME=$1
-    ENV_VAR_VALUE=$2
-    echo -n "$ENV_VAR_VALUE" > $ENV_DIR/$ENV_VAR_NAME
-    echo "$ENV_VAR_NAME = $ENV_VAR_VALUE"
+VENDOR_DIR="$BUILD_DIR/vendor"
+BUILD_CACHE_DIR="$CACHE_DIR/vendor"
+EXPORT_SCRIPT="$PWD/export"
+PROFILE_DIR="$BUILD_DIR/.profile.d"
+PROFILE_SCRIPT="$PROFILE_DIR/omniref.sh"
+
+mkdir -p $PROFILE_DIR
+mkdir -p $VENDOR_DIR
+mkdir -p $BUILD_CACHE_DIR
+
+function error() {
+  echo " !     $*" >&2
+  exit 1
 }
 
-if [ -d "$BUILD_DIR/.apt/usr/include" ]; then
-    find $BUILD_DIR/.apt/usr/include -type f -follow -print
+function topic() {
+  echo "-----> $*"
+}
+
+function set-default-env (){
+  echo "export $1=\$$1:/app/vendor/$2" >> $PROFILE_SCRIPT
+  echo "export $1=\$$1:/app/vendor/$2" >> $EXPORT_SCRIPT
+}
+
+if [ -d "$BUILD_CACHE_DIR/cmake"]; then
+    topic "found cached cmake build"
+    cp -R "$BUILD_CACHE_DIR/cmake" $VENDOR_DIR
+else
+    topic "fetching cmake v3.2.3 source from cmake.org"
+    curl 'http://www.cmake.org/files/v3.2/cmake-3.2.3.tar.gz' -s -o - | tar -xz -C "$VENDOR_DIR"
+    cd "$VENDOR_DIR/cmake-3.2.3" 
+
+    topic "building cmake"
+    ./configure --prefix=$BUILD_CACHE_DIR
+    make
+    make install
+    ls -R $BUILD_CACHE_DIR
 fi
 
-set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-lib=\"$BUILD_DIR/.apt/usr/lib\" --with-icu-include=\"$BUILD_DIR/.apt/usr/include/x86_64-linux-gnu\""
+# FYI we do this and set the export path explicitly because we cannot assume all buildpacks copy this dir over
+# We need to also leave the vendor dir repo in place, as the current app vendor gets blown away and replaced with
+# what is in the build dir
+#cp -R "$VENDOR_DIR/cmake" "/app/vendor/cmake"
+
+#set-default-env PATH "cmake/bin"
+#set-default-env LD_LIBRARY_PATH "cmake/lib"
+#set-default-env LIBRARY_PATH "cmake/lib"
+#set-default-env CPATH "cmake/include"
