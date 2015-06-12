@@ -5,34 +5,15 @@ set -e
 
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 
-VENDOR_DIR="$BUILD_DIR/vendor"
-EXPORT_PATH="$PWD/export"
-PROFILE_PATH="$BUILD_DIR/.profile.d/cmake.sh"
-
-mkdir -p $(dirname $PROFILE_PATH)
-mkdir -p $VENDOR_DIR
-
-function set-default-env (){
-  echo "export $1=\$$1:/app/vendor/$2" >> $PROFILE_PATH
-  echo "export $1=\$$1:/app/vendor/$2" >> $EXPORT_PATH
+function set_env_var() {
+    ENV_VAR_NAME=$1
+    ENV_VAR_VALUE=$2
+    echo -n "$ENV_VAR_VALUE" > $ENV_DIR/$ENV_VAR_NAME
+    echo "$ENV_VAR_NAME = $ENV_VAR_VALUE" | indent
 }
 
-echo "-----> Fetching and vendoring cmake"
-curl 'http://www.cmake.org/files/v3.2/cmake-3.2.3.tar.gz' -s -o - | tar -xz -C "$VENDOR_DIR"
+set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-dir=\"$BUILD_DIR/.apt/usr\""
 
-mv "$VENDOR_DIR/cmake-3.2.3" "$VENDOR_DIR/cmake"
-cd "$VENDOR_DIR/cmake"
-./configure --prefix=$VENDOR_DIR
-make
-make install
 
-# FYI we do this and set the export path explicitly because we cannot assume all buildpacks copy this dir over
-# We need to also leave the vendor dir repo in place, as the current app vendor gets blown away and replaced with
-# what is in the build dir
-cp -R "$VENDOR_DIR/cmake" "/app/vendor/cmake"
-
-set-default-env PATH "cmake/bin"
-set-default-env LD_LIBRARY_PATH "cmake/lib"
-set-default-env LIBRARY_PATH "cmake/lib"
-set-default-env CPATH "cmake/include"

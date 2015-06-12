@@ -1,3 +1,4 @@
 # Heroku Cerdar Buildpack for Injecting Rugged Dependencies
 
-Adds CMake to make the Rugged gem compile on Heroku.
+Sets an environment variable to tell bundler where to look for libicu,
+which is needed by charlock holmes.
