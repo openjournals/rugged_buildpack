@@ -71,12 +71,3 @@ set-default-env LD_LIBRARY_PATH "vendor/lib"
 set-default-env INCLUDE_PATH "vendor/include"
 set-default-env CPATH "vendor/include"
 set-default-env CPPPATH "vendor/include"
-
-if [ ! -x "$VENDOR_DIR/cmake" ]; then
-    error "couldn't find an executable cmake!"
-fi
-
-if [ ! -x "$VENDOR_DIR/bin/uconv" ]; then
-    error "couldn't find an executable icu/uconv!"
-fi
-
