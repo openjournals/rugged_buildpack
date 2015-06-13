@@ -58,7 +58,7 @@ if [ ! -x "$VENDOR_DIR/bin/uconv" ]; then
     cd "$BUILD_DIR/icu/source"
 
     topic "building libicu from source."
-    configure --prefix="$BUILD_CACHE_DIR/icu"
+    ./configure --prefix="$BUILD_CACHE_DIR/icu"
     make
     make install
     
