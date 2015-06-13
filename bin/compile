@@ -27,8 +27,8 @@ function topic() {
 }
 
 function set-default-env (){
-  echo "export $1=\$$1:$BUILD_DIR/$2" >> $PROFILE_SCRIPT
-  echo "export $1=\$$1:$HOME/$2" >> $EXPORT_SCRIPT
+    echo "export $1=\$$1:$BUILD_DIR/$2" >> $PROFILE_SCRIPT
+    echo "export $1=\$$1:$HOME/$2" >> $EXPORT_SCRIPT
 }
 
 if [ -d "$BUILD_CACHE_DIR/cmake" ]; then
@@ -42,6 +42,10 @@ if [ ! -d "$VENDOR_DIR/bin/cmake" ]; then
     mv "$VENDOR_DIR/cmake-3.2.3-Linux-x86_64" "$VENDOR_DIR/cmake"
     topic "copying cmake binaries to cache"
     cp -R "$VENDOR_DIR/cmake" "$BUILD_CACHE_DIR/cmake"
+
+    if [ ! -x "$VENDOR_DIR/cmake" ]; then
+        error "couldn't find an executable cmake after install!"
+    fi
 fi
 
 # FYI we do this and set the export path explicitly because we cannot assume all buildpacks copy this dir over
