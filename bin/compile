@@ -27,31 +27,31 @@ function topic() {
 }
 
 function set-default-env (){
-  echo "export $1=\$$1:/app/vendor/$2" >> $PROFILE_SCRIPT
-  echo "export $1=\$$1:/app/vendor/$2" >> $EXPORT_SCRIPT
+  echo "export $1=\$$1:$BUILD_DIR/$2" >> $PROFILE_SCRIPT
+  echo "export $1=\$$1:$HOME/$2" >> $EXPORT_SCRIPT
 }
 
-if [ -d "$BUILD_CACHE_DIR/cmake" ]; then
-    topic "found cached cmake build"
-    cp -R "$BUILD_CACHE_DIR/cmake" $VENDOR_DIR
-else
-    topic "fetching cmake v3.2.3 source from cmake.org"
-    curl 'http://www.cmake.org/files/v3.2/cmake-3.2.3.tar.gz' -s -o - | tar -xz -C "$VENDOR_DIR"
-    cd "$VENDOR_DIR/cmake-3.2.3" 
+if [ -d $BUILD_CACHE_DIR ]; then
+    topic "copying cached vendor builds"
+    cp -R $BUILD_CACHE_DIR $VENDOR_DIR
+fi
 
-    topic "building cmake"
-    ./configure --prefix=$BUILD_CACHE_DIR
-    make
-    make install
-    ls -R $BUILD_CACHE_DIR
+if [! -d "$VENDOR_DIR/bin/cmake" ]
+    topic "no cmake build found. Installing binary cmake v3.2.3 from cmake.org"
+    curl 'http://www.cmake.org/files/v3.2/cmake-3.2.3-Linux-x86_64.tar.gz' -s -o - | tar -xz -C "$VENDOR_DIR"
+    mv "$VENDOR_DIR/cmake-3.2.3-Linux-x86_64" "$VENDOR_DIR/cmake"
+    topic "copying cmake binaries to cache"
+    cp -R "$VENDOR_DIR/cmake" "$BUILD_CACHE_DIR/cmake"
 fi
 
 # FYI we do this and set the export path explicitly because we cannot assume all buildpacks copy this dir over
 # We need to also leave the vendor dir repo in place, as the current app vendor gets blown away and replaced with
 # what is in the build dir
-#cp -R "$VENDOR_DIR/cmake" "/app/vendor/cmake"
+#cp -R "$VENDOR_DIR" "/app/vendor"
 
-#set-default-env PATH "cmake/bin"
-#set-default-env LD_LIBRARY_PATH "cmake/lib"
-#set-default-env LIBRARY_PATH "cmake/lib"
-#set-default-env CPATH "cmake/include"
+set-default-env PATH "vendor/bin"
+set-default-env LD_LIBRARY_PATH "vendor/lib"
+set-default-env LIBRARY_PATH "vendor/lib"
+set-default-env INCLUDE_PATH "vendor/include"
+set-default-env CPATH "vendor/include"
+set-default-env CPPPATH "vendor/include"
