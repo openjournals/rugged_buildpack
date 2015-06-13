@@ -36,14 +36,14 @@ function set-default-env (){
 # install CMake from cache, or from binary build download
 if [ -d "$BUILD_CACHE_DIR/cmake" ]; then
     topic "copying cached cmake build."
-    cp -R "$BUILD_CACHE_DIR/cmake/{bin,share}" $VENDOR_DIR
+    cp -R "$BUILD_CACHE_DIR/cmake/\{bin,share\}" $VENDOR_DIR
 fi
 
 if [ ! -x "$VENDOR_DIR/bin/cmake" ]; then
     topic "no cmake build found. Installing binary cmake v3.2.3 from cmake.org."
     curl 'http://www.cmake.org/files/v3.2/cmake-3.2.3-Linux-x86_64.tar.gz' -s -o - | tar -xz -C "$BUILD_CACHE_DIR"
     mv "$BUILD_CACHE_DIR/cmake-3.2.3-Linux-x86_64" "$BUILD_CACHE_DIR/cmake"
-    cp -R "$BUILD_CACHE_DIR/cmake/{bin,share}" $VENDOR_DIR
+    cp -R "$BUILD_CACHE_DIR/cmake/\{bin,share\}" $VENDOR_DIR
 fi
 
 # install libicu from cache, or from source build
