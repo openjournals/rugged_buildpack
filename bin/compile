@@ -65,6 +65,8 @@ if [ ! -x "$VENDOR_DIR/bin/uconv" ]; then
     cp -R "$BUILD_CACHE_DIR/icu/" $VENDOR_DIR
 fi
 
+ls -R $VENDOR_DIR
+
 set-default-env PATH "vendor/bin"
 set-default-env LIBRARY_PATH "vendor/lib"
 set-default-env LD_LIBRARY_PATH "vendor/lib"
