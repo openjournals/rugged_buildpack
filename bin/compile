@@ -33,7 +33,7 @@ function set-default-env (){
 
 if [ -d $BUILD_CACHE_DIR ]; then
     topic "copying cached vendor builds"
-    cp -R $BUILD_CACHE_DIR $VENDOR_DIR
+    cp -R "$BUILD_CACHE_DIR/cmake" "$VENDOR_DIR/cmake"
 fi
 
 if [ ! -d "$VENDOR_DIR/bin/cmake" ]; then
@@ -49,9 +49,5 @@ fi
 # what is in the build dir
 #cp -R "$VENDOR_DIR" "/app/vendor"
 
-set-default-env PATH "vendor/bin"
-set-default-env LD_LIBRARY_PATH "vendor/lib"
-set-default-env LIBRARY_PATH "vendor/lib"
-set-default-env INCLUDE_PATH "vendor/include"
-set-default-env CPATH "vendor/include"
-set-default-env CPPPATH "vendor/include"
+set-default-env PATH "vendor/cmake/bin"
+set-default-env PATH "vendor/cmake/share"
