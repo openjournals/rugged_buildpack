@@ -53,7 +53,7 @@ if [ -d "$BUILD_CACHE_DIR/icu" ]; then
 fi
 
 if [ ! -x "$VENDOR_DIR/bin/uconv" ]; then
-    topic "no icu build found. Downoading source."
+    topic "no icu build found. Downloading source."
     curl 'http://ftp.oregonstate.edu/.1/blfs/conglomeration/icu/icu4c-55_1-src.tgz' -s -o - | tar -xz -C "$BUILD_DIR"
     cd "$BUILD_DIR/icu/source"
 
