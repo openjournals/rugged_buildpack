@@ -54,7 +54,7 @@ fi
 
 if [ ! -x "$VENDOR_DIR/bin/uconv" ]; then
     topic "no icu build found. Downoading source."
-    curl 'http://download.icu-project.org/files/icu4c/55.1/icu4c-55_1-src.tgz' -s -o - | tar -xz -C "$BUILD_DIR"
+    curl 'http://ftp.oregonstate.edu/.1/blfs/conglomeration/icu/icu4c-55_1-src.tgz' -s -o - | tar -xz -C "$BUILD_DIR"
     cd "$BUILD_DIR/icu/source"
 
     topic "building libicu from source."
